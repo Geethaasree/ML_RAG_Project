@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  backend:
+    build: ./backend
+    container_name: mlrag_backend
+    ports:
+      - "8080:8080"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - FAISS_INDEX_PATH=/app/faiss_index.pkl
+      - FAISS_DOCS_PATH=/app/docs.pkl
+    volumes:
+      - ./backend/app/models:/app/models
+      - ./ingestion/faiss_store:/app
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: mlrag_frontend
+    ports:
+      - "3000:80"
+    restart: unless-stopped
